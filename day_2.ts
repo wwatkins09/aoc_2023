@@ -40,3 +40,29 @@ const parseDraw = (drawText) => {
     return { ...acc, [color]: parseInt(count) };
   }, {});
 };
+
+// part 2
+
+const sumMinimumGamePowers = (gamesText) => {
+  const gamesAsMetadata = gamesText.split("\n").map(parseGame);
+  return gamesAsMetadata.reduce(
+    (acc, gameMetadata) => acc + findGameMinimumPower(gameMetadata.draws),
+    0
+  );
+};
+
+const findGameMinimumPower = (draws: Draw[]) => {
+  const minimumPowerDraw = draws.reduce(
+    (acc, draw) => ({
+      blue: Math.max(acc.blue, draw.blue ?? 0),
+      green: Math.max(acc.green, draw.green ?? 0),
+      red: Math.max(acc.red, draw.red ?? 0),
+    }),
+    {
+      blue: 0,
+      green: 0,
+      red: 0,
+    }
+  );
+  return Object.values(minimumPowerDraw).reduce((acc, count) => acc * count, 1);
+};
